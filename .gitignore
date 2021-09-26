@@ -19,3 +19,4 @@ bin-release/
 frameworks/runtime-src/proj.android-studio/.idea
 frameworks/runtime-src/proj.android-studio/app/.externalNativeBuild
 frameworks/cocos2d-x/cocos/platform/android/libcocos2dx/build
+libcocos2dx.iml

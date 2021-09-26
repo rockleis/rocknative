@@ -24,6 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 package org.cocos2dx.javascript;
 
+import org.cocos2d.helloworld.MainActivity;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
@@ -109,7 +110,11 @@ public class AppActivity extends Cocos2dxActivity {
     @Override
     public void onBackPressed() {
         SDKWrapper.getInstance().onBackPressed();
-        super.onBackPressed();
+        //super.onBackPressed();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 
     @Override

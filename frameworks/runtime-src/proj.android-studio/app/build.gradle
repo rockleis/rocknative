@@ -25,13 +25,12 @@ android {
                                         project.file("../../../cocos2d-x/external")]
                     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
                         arguments 'NDK_MODULE_PATH=' + module_paths.join(";")
-                    }
-                    else {
+                    } else {
                         arguments 'NDK_MODULE_PATH=' + module_paths.join(':')
                     }
-                    
+
                     arguments '-j' + Runtime.runtime.availableProcessors()
-                    abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
+                    abiFilters.addAll(PROP_APP_ABI.split(':').collect { it as String })
                 }
             }
         }
@@ -55,7 +54,7 @@ android {
 
     signingConfigs {
 
-       release {
+        release {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 storeFile file(RELEASE_STORE_FILE)
                 storePassword RELEASE_STORE_PASSWORD
@@ -133,7 +132,10 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation fileTree(dir: "../../../cocos2d-x/cocos/platform/android/java/libs", include: ['*.jar'])
     implementation project(':libcocos2dx')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:28.0.0'
 }

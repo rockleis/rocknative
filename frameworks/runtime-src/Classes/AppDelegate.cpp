@@ -46,6 +46,8 @@ AppDelegate::~AppDelegate()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
+    //if(true){return true;}
+
     se::ScriptEngine* se = se::ScriptEngine::getInstance();
 
     jsb_set_xxtea_key("");

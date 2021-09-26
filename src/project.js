@@ -1,27 +1,27 @@
-window.__require = function e(r, t, n) {
-function o(i, u) {
-if (!t[i]) {
-if (!r[i]) {
-var c = i.split("/");
-c = c[c.length - 1];
+window.__require = function e(r, t, o) {
+function n(c, i) {
+if (!t[c]) {
 if (!r[c]) {
-var f = "function" == typeof __require && __require;
-if (!u && f) return f(c, !0);
-if (l) return l(c, !0);
-throw new Error("Cannot find module '" + i + "'");
+var l = c.split("/");
+l = l[l.length - 1];
+if (!r[l]) {
+var s = "function" == typeof __require && __require;
+if (!i && s) return s(l, !0);
+if (u) return u(l, !0);
+throw new Error("Cannot find module '" + c + "'");
 }
 }
-var s = t[i] = {
+var _ = t[c] = {
 exports: {}
 };
-r[i][0].call(s.exports, function(e) {
-return o(r[i][1][e] || e);
-}, s, s.exports, e, r, t, n);
+r[c][0].call(_.exports, function(e) {
+return n(r[c][1][e] || e);
+}, _, _.exports, e, r, t, o);
 }
-return t[i].exports;
+return t[c].exports;
 }
-for (var l = "function" == typeof __require && __require, i = 0; i < n.length; i++) o(n[i]);
-return o;
+for (var u = "function" == typeof __require && __require, c = 0; c < o.length; c++) n(o[c]);
+return n;
 }({
 HelloWorld: [ function(e, r, t) {
 "use strict";
@@ -41,5 +41,11 @@ this.label.string = this.text;
 update: function(e) {}
 });
 cc._RF.pop();
+}, {} ],
+use_reversed_rotateTo: [ function(e, r, t) {
+"use strict";
+cc._RF.push(r, "7ee64J1QnZGeYM2rOM1tg59", "use_reversed_rotateTo");
+cc.RotateTo._reverse = !0;
+cc._RF.pop();
 }, {} ]
-}, {}, [ "HelloWorld" ]);
+}, {}, [ "HelloWorld", "use_reversed_rotateTo" ]);
