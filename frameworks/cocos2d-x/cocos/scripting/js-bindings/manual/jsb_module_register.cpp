@@ -192,3 +192,10 @@ bool jsb_register_all_modules()
     });
     return true;
 }
+
+
+
+// @Leo 强制释放webview
+bool cleanWebView() {
+    return true;
+}

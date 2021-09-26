@@ -45,6 +45,7 @@ base/etc1.cpp \
 base/etc2.cpp \
 base/pvr.cpp \
 base/CCLog.cpp \
+base/CCCallBack.cpp \
 base/CCScheduler.cpp \
 base/csscolorparser.cpp \
 base/CCGLUtils.cpp \

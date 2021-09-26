@@ -42,6 +42,9 @@ static_assert(sizeof(float) == sizeof(GLfloat), "ERROR: GLfloat isn't equal to f
 
 namespace
 {
+    //@Leo 换单例申请位置，让他可以释放
+    static DeviceGraphics* __instance = nullptr;
+
     void attach(GLenum location, const RenderTarget* target)
     {
         if (nullptr != dynamic_cast<const Texture2D*>(target))
@@ -57,11 +60,18 @@ namespace
 
 DeviceGraphics* DeviceGraphics::getInstance()
 {
-    static DeviceGraphics* __instance = nullptr;
     if (__instance == nullptr)
         __instance = new (std::nothrow) DeviceGraphics();
 
     return __instance;
+}
+
+//@Leo 添加清除渲染单例方法
+void DeviceGraphics::destroyInstance()
+{
+    if (__instance)
+        delete __instance;
+    __instance = nullptr;
 }
 
 void DeviceGraphics::setFrameBuffer(const FrameBuffer* fb)
@@ -575,6 +585,7 @@ DeviceGraphics::DeviceGraphics()
     
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFbo);
 }
+
 
 DeviceGraphics::~DeviceGraphics()
 {

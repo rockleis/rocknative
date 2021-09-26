@@ -285,25 +285,25 @@ namespace cocos2d {
         [_uiWebViewWrapper retain];
 
         _uiWebViewWrapper.shouldStartLoading = [this](std::string url) {
-            if (this->_webView->_onShouldStartLoading) {
-                return this->_webView->_onShouldStartLoading(this->_webView, url);
-            }
+//            if (this->_webView->_onShouldStartLoading) {
+//                return this->_webView->_onShouldStartLoading(this->_webView, url);
+//            }
             return true;
         };
         _uiWebViewWrapper.didFinishLoading = [this](std::string url) {
-            if (this->_webView->_onDidFinishLoading) {
-                this->_webView->_onDidFinishLoading(this->_webView, url);
-            }
+//            if (this->_webView->_onDidFinishLoading) {
+//                this->_webView->_onDidFinishLoading(this->_webView, url);
+//            }
         };
         _uiWebViewWrapper.didFailLoading = [this](std::string url) {
-            if (this->_webView->_onDidFailLoading) {
-                this->_webView->_onDidFailLoading(this->_webView, url);
-            }
+//            if (this->_webView->_onDidFailLoading) {
+//                this->_webView->_onDidFailLoading(this->_webView, url);
+//            }
         };
         _uiWebViewWrapper.onJsCallback = [this](std::string url) {
-            if (this->_webView->_onJSCallback) {
-                this->_webView->_onJSCallback(this->_webView, url);
-            }
+//            if (this->_webView->_onJSCallback) {
+//                this->_webView->_onJSCallback(this->_webView, url);
+//            }
         };
     }
 

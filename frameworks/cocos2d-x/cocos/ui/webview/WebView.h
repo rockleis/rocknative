@@ -214,6 +214,8 @@ NS_CC_BEGIN
          * Set the background transparent
          */
         virtual void setBackgroundTransparent(bool isTransparent);
+        
+        void resetCallback();
 
     protected:
 

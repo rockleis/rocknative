@@ -33,7 +33,15 @@ class SimpleSprite2D: public AssemblerSprite
 public:
     SimpleSprite2D();
     virtual ~SimpleSprite2D();
+    // jim+
+    void setOffset(int xLTOffset, int xRTOffset, int xLBOffset, int xRBOffset);
+    // end jim+
     virtual void fillBuffers(NodeProxy* node, MeshBuffer* buffer, std::size_t index) override;
+public:
+    int xLTOffset;
+    int xRTOffset;
+    int xLBOffset;
+    int xRBOffset;
 };
 
 RENDERER_END

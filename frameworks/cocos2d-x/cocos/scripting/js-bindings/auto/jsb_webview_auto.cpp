@@ -7,6 +7,7 @@
 se::Object* __jsb_cocos2d_WebView_proto = nullptr;
 se::Class* __jsb_cocos2d_WebView_class = nullptr;
 
+
 static bool js_webview_WebView_setOnShouldStartLoading(se::State& s)
 {
     cocos2d::WebView* cobj = (cocos2d::WebView*)s.nativeThisObject();

@@ -85,6 +85,9 @@ namespace se {
 
 
     void ObjectWrap::ref() {
+        //Leo modify
+        if (persistent().IsEmpty())
+            return;
         assert(!persistent().IsEmpty());
         persistent().ClearWeak();
         refs_++;

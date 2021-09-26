@@ -342,6 +342,24 @@ void Manifest::genResumeAssetsList(DownloadUnits *units) const
     }
 }
 
+void Manifest::genResumeAssetsList(DownloadUnits *units, std::string newPackageUrl) const
+{
+    for (auto it = _assets.begin(); it != _assets.end(); ++it)
+    {
+        Asset asset = it->second;
+        
+        if (asset.downloadState != DownloadState::SUCCESSED && asset.downloadState != DownloadState::UNMARKED)
+        {
+            DownloadUnit unit;
+            unit.customId = it->first;
+            unit.srcUrl = newPackageUrl + asset.path;
+            unit.storagePath = _manifestRoot + asset.path;
+            unit.size = asset.size;
+            units->emplace(unit.customId, unit);
+        }
+    }
+}
+
 std::vector<std::string> Manifest::getSearchPaths() const
 {
     std::vector<std::string> searchPaths;
@@ -521,10 +539,17 @@ Manifest::Asset Manifest::parseAsset(const std::string &path, const rapidjson::V
 
 void Manifest::loadVersion(const rapidjson::Document &json)
 {
+//    struct timeval tv;
+//    gettimeofday(&tv,NULL);
+//    long nTime = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+
     // Retrieve remote manifest url
     if ( json.HasMember(KEY_MANIFEST_URL) && json[KEY_MANIFEST_URL].IsString() )
     {
         _remoteManifestUrl = json[KEY_MANIFEST_URL].GetString();
+//        _remoteManifestUrl += "/?time=";
+//        _remoteManifestUrl += std::to_string(nTime);
+//        CCLOG("====%s, %ld", _remoteManifestUrl.c_str(), nTime);
     }
     
     // Retrieve remote version url

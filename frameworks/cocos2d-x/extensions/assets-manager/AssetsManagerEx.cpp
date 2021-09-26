@@ -26,6 +26,7 @@
 #include "AssetsManagerEx.h"
 #include "base/ccUTF8.h"
 #include "CCAsyncTaskPool.h"
+#include "storage/local-storage/LocalStorage.h"
 
 #include <stdio.h>
 #include <errno.h>
@@ -46,7 +47,7 @@ NS_CC_EXT_BEGIN
 #define BUFFER_SIZE    8192
 #define MAX_FILENAME   512
 
-#define DEFAULT_CONNECTION_TIMEOUT 45
+#define DEFAULT_CONNECTION_TIMEOUT 60
 
 #define SAVE_POINT_INTERVAL 0.1
 
@@ -706,7 +707,8 @@ void AssetsManagerEx::downloadVersion()
     if (_updateState > State::PREDOWNLOAD_VERSION)
         return;
 
-    std::string versionUrl = _localManifest->getVersionFileUrl();
+//    std::string versionUrl = _localManifest->getVersionFileUrl();
+    std::string versionUrl = this->getVersionFileUrl();     // by whos
 
     if (versionUrl.size() > 0)
     {
@@ -769,7 +771,8 @@ void AssetsManagerEx::downloadManifest()
     if (_updateState != State::PREDOWNLOAD_MANIFEST)
         return;
 
-    std::string manifestUrl = _localManifest->getManifestFileUrl();
+//    std::string manifestUrl = _localManifest->getManifestFileUrl();
+    std::string manifestUrl = this->getManifestFileUrl();       // by whos
 
     if (manifestUrl.size() > 0)
     {
@@ -839,7 +842,8 @@ void AssetsManagerEx::prepareUpdate()
     if (_tempManifest && _tempManifest->isLoaded() && _tempManifest->isUpdating() && _tempManifest->versionEquals(_remoteManifest))
     {
         _tempManifest->saveToFile(_tempManifestPath);
-        _tempManifest->genResumeAssetsList(&_downloadUnits);
+//        _tempManifest->genResumeAssetsList(&_downloadUnits);
+        _tempManifest->genResumeAssetsList(&_downloadUnits, this->getPackageUrl());         // by whos
         _totalWaitToDownload = _totalToDownload = (int)_downloadUnits.size();
         _downloadResumed = true;
     }
@@ -870,7 +874,8 @@ void AssetsManagerEx::prepareUpdate()
         else
         {
             // Generate download units for all assets that need to be updated or added
-            std::string packageUrl = _remoteManifest->getPackageUrl();
+//            std::string packageUrl = _remoteManifest->getPackageUrl();
+            std::string packageUrl = this->getPackageUrl();         // by whos
             // Preprocessing local files in previous version and creating download folders
             for (auto it = diff_map.begin(); it != diff_map.end(); ++it)
             {
@@ -1044,6 +1049,11 @@ void AssetsManagerEx::update()
     }
 
     _updateEntry = UpdateEntry::DO_UPDATE;
+    // jim+ for retry
+    if(_updateState == State::FAIL_TO_UPDATE){
+        _updateState = State::NEED_UPDATE;
+    }
+    // end jim+
 
     switch (_updateState) {
         case State::UNCHECKED:
@@ -1192,8 +1202,12 @@ void AssetsManagerEx::onError(const network::DownloadTask& task,
     if (task.identifier == VERSION_ID)
     {
         CCLOG("AssetsManagerEx : Fail to download version file, step skipped\n");
-        _updateState = State::PREDOWNLOAD_MANIFEST;
-        downloadManifest();
+        // jim+ same as manifest
+        dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST, task.identifier, errorStr, errorCode, errorCodeInternal);
+        _updateState = State::FAIL_TO_UPDATE;
+        // end jim+
+//        _updateState = State::PREDOWNLOAD_MANIFEST;
+//        downloadManifest();
     }
     else if (task.identifier == MANIFEST_ID)
     {
@@ -1302,7 +1316,7 @@ void AssetsManagerEx::onSuccess(const std::string &/*srcUrl*/, const std::string
         }
         else
         {
-            fileError(customId, "Asset file verification failed after downloaded");
+            fileError(customId, "md5err");
         }
     }
 }
@@ -1380,5 +1394,45 @@ void AssetsManagerEx::onDownloadUnitsFinished()
         updateSucceed();
     }
 }
+
+// by whos ---------------------
+std::string AssetsManagerEx::getPackageUrl(){
+    std::string packageUrl = "";
+    localStorageGetItem("newPackageUrl", &packageUrl);
+    if (packageUrl == "") {
+        packageUrl = "none";
+    }else if(packageUrl == "old"){
+        packageUrl = _localManifest->getPackageUrl();
+    }
+    if (packageUrl.size() > 0 && packageUrl[packageUrl.size() - 1] != '/')
+    {
+        packageUrl.append("/");
+    }
+    return packageUrl;
+}
+
+std::string AssetsManagerEx::getVersionFileUrl(){
+    std::string versionFileUrl = "";
+    localStorageGetItem("VersionFileUrl", &versionFileUrl);
+    if (versionFileUrl == "") {
+        versionFileUrl = "none";
+    }else if(versionFileUrl == "old"){
+        versionFileUrl = _localManifest->getVersionFileUrl();
+    }
+    return versionFileUrl;
+}
+
+std::string AssetsManagerEx::getManifestFileUrl(){
+    std::string manifestFileUrl = "none";
+    localStorageGetItem("ManifestFileUrl", &manifestFileUrl);
+    if (manifestFileUrl == "") {
+        manifestFileUrl = "none";
+    }else if(manifestFileUrl == "old"){
+        manifestFileUrl = _localManifest->getManifestFileUrl();
+    }
+    return manifestFileUrl;
+}
+// -----------------------
+
 
 NS_CC_EXT_END

@@ -712,8 +712,13 @@ void AudioEngineImpl::update(float dt)
             it = _audioPlayers.erase(it);
             _threadMutex.unlock();
 
-            if (player->_finishCallbak) {
-                player->_finishCallbak(audioID, filePath); //IDEA: callback will delay 50ms
+            if(auto sche = _scheduler.lock()) {
+                auto cb = player->_finishCallbak;
+                if (player->_finishCallbak) {
+                    sche->performFunctionInCocosThread([audioID, cb, filePath](){
+                            cb(audioID, filePath); //IDEA: callback will delay 50ms
+                    });
+                }
             }
 
             delete player;

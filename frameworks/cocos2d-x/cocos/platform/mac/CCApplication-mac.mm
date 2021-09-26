@@ -188,6 +188,7 @@ void Application::start()
 
 void Application::restart()
 {
+    cocos2d::cardLog::getInstance()->log("Application::restart");
     _isStarted = false;
 }
 

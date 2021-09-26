@@ -107,6 +107,36 @@ namespace
 
 namespace cocos2d
 {
+    static cardLog * _cardLog = nullptr;
+
+    cardLog* cardLog::getInstance()
+    {
+        if (_cardLog == nullptr)
+        {
+            _cardLog = new (std::nothrow) cardLog();
+        }
+        return _cardLog;
+    }
+
+    void cardLog::destroyInstance()
+    {
+        delete _cardLog;
+        _cardLog = nullptr;
+    }
+
+    void cardLog::setLogCallback(logCallback callback)
+    {
+        _logCallback = callback;
+    }
+
+    void cardLog::log(const char* strlog)
+    {
+        cocos2d::log("%s", strlog);
+        if(_logCallback)
+        {
+            _logCallback(strlog);
+        }
+    }
 
 	void log(const char * format, ...)
 	{
@@ -115,6 +145,5 @@ namespace cocos2d
 		_log(format, args);
 		va_end(args);
 	}
-
 }
 

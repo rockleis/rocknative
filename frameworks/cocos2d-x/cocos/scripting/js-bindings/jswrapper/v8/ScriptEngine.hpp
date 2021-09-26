@@ -30,6 +30,7 @@
 
 #include "Base.h"
 #include "../Value.hpp"
+#include <thread>
 
 #if SE_ENABLE_INSPECTOR
 namespace node {
@@ -43,6 +44,10 @@ namespace node {
 #endif
 
 namespace se {
+
+    //@Leo 创建一个静态平台变量，来缓存平台信息
+    static v8::Platform* sharedPlatform = nullptr;
+
 
     class Object;
     class Class;
@@ -327,6 +332,8 @@ namespace se {
 
         uint32_t _vmId;
 
+        std::thread::id _engineThreadId;
+        
         bool _isValid;
         bool _isGarbageCollecting;
         bool _isInCleanup;

@@ -47,3 +47,5 @@ bool jsb_run_script_module(const std::string& filePath, se::Value* rval = nullpt
 void jsb_set_xxtea_key(const std::string& key);
 
 bool jsb_global_load_image(const std::string& path, const se::Value& callbackVal);
+void clearDownloader(); //@Leo 强制释放Downloader
+

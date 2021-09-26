@@ -36,6 +36,13 @@
 #include "base/CCGLUtils.h"
 #include "audio/include/AudioEngine.h"
 
+#include "platform/CCFileUtils.h"
+#include "renderer/scene/StencilManager.hpp"
+#include "editor-support/spine-creator-support/SkeletonDataMgr.h"
+#include "editor-support/dragonbones-creator-support/ArmatureCacheMgr.h"
+#include "editor-support/MiddlewareManager.h"
+#include "renderer/scene/NodeMemPool.hpp"
+#include "network/WebSocket.h"
 
 namespace
 {
@@ -115,9 +122,10 @@ namespace
     if ([view isReady]) 
     {
         auto scheduler = _application->getScheduler();
-        scheduler->removeAllFunctionsToBePerformedInCocosThread();
-        scheduler->unscheduleAll();
-
+        if (scheduler != NULL) {
+            scheduler->removeAllFunctionsToBePerformedInCocosThread();
+            scheduler->unscheduleAll();
+        }
         se::ScriptEngine::getInstance()->cleanup();
         cocos2d::PoolManager::getInstance()->getCurrentPool()->clear();
         cocos2d::EventDispatcher::init();
@@ -168,23 +176,33 @@ namespace
     static std::chrono::steady_clock::time_point now;
     static float dt = 0.f;
 
-    prevTime = std::chrono::steady_clock::now();
-    
-    bool downsampleEnabled = _application->isDownsampleEnabled();
-    if (downsampleEnabled)
-        _application->getRenderTexture()->prepare();
-    
-    _scheduler->update(dt);
-    cocos2d::EventDispatcher::dispatchTickEvent(dt);
-    
-    if (downsampleEnabled)
-        _application->getRenderTexture()->draw();
-    
-    [(CCEAGLView*)(_application->getView()) swapBuffers];
-    cocos2d::PoolManager::getInstance()->getCurrentPool()->clear();
-    
-    now = std::chrono::steady_clock::now();
-    dt = std::chrono::duration_cast<std::chrono::microseconds>(now - prevTime).count() / 1000000.f;
+    if (_isAppActive)
+    {
+        EAGLContext* context = [(CCEAGLView*)(_application->getView()) getContext];
+        if (context != [EAGLContext currentContext])
+        {
+            glFlush();
+        }
+        [EAGLContext setCurrentContext: context];
+        
+       prevTime = std::chrono::steady_clock::now();
+       
+       bool downsampleEnabled = _application->isDownsampleEnabled();
+       if (downsampleEnabled)
+           _application->getRenderTexture()->prepare();
+       
+       _scheduler->update(dt);
+       cocos2d::EventDispatcher::dispatchTickEvent(dt);
+       
+       if (downsampleEnabled)
+           _application->getRenderTexture()->draw();
+       
+       [(CCEAGLView*)(_application->getView()) swapBuffers];
+       cocos2d::PoolManager::getInstance()->getCurrentPool()->clear();
+       
+       now = std::chrono::steady_clock::now();
+       dt = std::chrono::duration_cast<std::chrono::microseconds>(now - prevTime).count() / 1000000.f;
+    }
 }
 
 @end
@@ -215,26 +233,67 @@ Application::Application(const std::string& name, int width, int height)
 
 Application::~Application()
 {
+    //@Leo 释放单例和资源
+    if (_scheduler != NULL) {
+        _scheduler->removeAllFunctionsToBePerformedInCocosThread();
+        _scheduler->unscheduleAll();
+    }
+     #if USE_AUDIO
+        AudioEngine::end();
+     #endif
+        
+        // spine
+      #if USE_SPINE
+        spine::SkeletonDataMgr::destroyInstance();
+      #endif
+        // dragonbones
+     #if USE_DRAGONBONES
+        dragonBones::ArmatureCacheMgr::destroyInstance();
+     #endif
+        // middleware
+     #if USE_MIDDLEWARE
+        middleware::MiddlewareManager::destroyInstance();
+     #endif
+            
+        // font
+        //TTFLabelAtlasCache::destroyInstance();
+//        renderer::NodeMemPool::destroyInstance();
+        
+        //stop websocket
+        network::WebSocket::closeAllConnections();
+            
+        // stencil
+        renderer::StencilManager::destroyInstance();
 
-#if USE_AUDIO
-    AudioEngine::end();
-#endif
+        EventDispatcher::destroy();
+        se::ScriptEngine::destroyInstance();
+        
+        // stop main loop
+        [(MainLoop*)_delegate stopMainLoop];
+        [(MainLoop*)_delegate release];
+        _delegate = nullptr;
+        
+        [(CCEAGLView*)_view release];
+        _view = nullptr;
 
-    EventDispatcher::destroy();
-    se::ScriptEngine::destroyInstance();
-    
-    // stop main loop
-    [(MainLoop*)_delegate stopMainLoop];
-    [(MainLoop*)_delegate release];
-    _delegate = nullptr;
-    
-    [(CCEAGLView*)_view release];
-    _view = nullptr;
+        delete _renderTexture;
+        _renderTexture = nullptr;
+        
+        // director
+        renderer::DeviceGraphics::destroyInstance();
+        
+        Configuration::destroyInstance();
+        
+        FileUtils::destroyInstance();
+        
+        // clean auto release pool
+        PoolManager::destroyInstance();
+        
+        Application::_scheduler = nullptr;
+        Application::_instance = nullptr;
 
-    delete _renderTexture;
-    _renderTexture = nullptr;
 
-    Application::_instance = nullptr;
+        CCCallBack::getInstance()->callDestoryCallback();
 }
 
 const cocos2d::Vec2& Application::getViewSize() const
@@ -262,11 +321,17 @@ void Application::restart()
     }
 }
 
+void Application::stop() {
+    if (_delegate) {
+        [(MainLoop*)_delegate stopMainLoop];
+    }
+}
+
 void Application::end()
 {
     delete this;
 
-    exit(0);
+    //exit(0);
 }
 
 void Application::setPreferredFramesPerSecond(int fps)

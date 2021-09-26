@@ -32,10 +32,25 @@ RENDERER_BEGIN
 static const std::string techStage = "opaque";
 StencilManager* StencilManager::_instance = nullptr;
 
+//@Leo 增加销毁单例方法
+void StencilManager::destroyInstance()
+{
+    if (_instance != nullptr) {
+        delete _instance;
+        _instance = nullptr;
+    }
+}
+
 StencilManager::StencilManager ()
 : _stage(Stage::DISABLED)
 {
 }
+
+StencilManager::~StencilManager() {
+    _instance->clear();
+}
+
+
 
 void StencilManager::reset ()
 {

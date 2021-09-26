@@ -168,6 +168,13 @@ NS_CC_BEGIN
         return _onJSCallback;
     }
 
+    void WebView::resetCallback() {
+        _onDidFinishLoading = nullptr;
+        _onDidFailLoading = nullptr;
+        _onJSCallback = nullptr;
+        _onShouldStartLoading = nullptr;
+    }
+
 } //namespace cocos2d
 
 /// @endcond

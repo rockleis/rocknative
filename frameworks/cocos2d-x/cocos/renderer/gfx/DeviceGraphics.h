@@ -94,6 +94,9 @@ public:
      * Returns a shared instance of the director.
      */
     static DeviceGraphics* getInstance();
+    
+    //@Leo 添加清除渲染单例方法
+    static void destroyInstance();
 
     /**
      * Sets the target FrameBuffer

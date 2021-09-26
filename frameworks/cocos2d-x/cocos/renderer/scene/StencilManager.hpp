@@ -58,6 +58,10 @@ class StencilManager
 public:
     StencilManager();
     ~StencilManager();
+    
+    //@Leo 增加销毁单例方法
+    static void destroyInstance();
+    
     /**
      * Reset all states
      */

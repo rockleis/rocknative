@@ -117,6 +117,8 @@ public:
     void start();
     void restart();
     void end();
+    //@Leo 停止runloop
+    void stop();
 
     /**
      * @brief Sets the preferred frame rate for main loop callback.
@@ -142,7 +144,7 @@ public:
     void updateViewSize(int width, int height);
 
     /**
-     @brief Get current display stats.
+     @brief Get current display stats. 
      @return bool, is displaying stats or not.
      */
     bool isDisplayStats();

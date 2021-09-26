@@ -29,6 +29,7 @@
 #if SCRIPT_ENGINE_TYPE == SCRIPT_ENGINE_JSC
 
 #include "Base.h"
+#include <thread>
 
 namespace se {
 
@@ -306,6 +307,8 @@ namespace se {
 
         uint32_t _vmId;
 
+        std::thread::id _engineThreadId; //cocos引擎id
+        
         bool _isGarbageCollecting;
         bool _isValid;
         bool _isInCleanup;

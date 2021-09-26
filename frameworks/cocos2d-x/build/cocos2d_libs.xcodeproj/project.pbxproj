@@ -1412,6 +1412,10 @@
 		BA21055F21009A5A00E19975 /* CCEventAssetsManagerEx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA21054921008AC300E19975 /* CCEventAssetsManagerEx.cpp */; };
 		BAEA45551E279D5C00FA219F /* tinydir.h in Headers */ = {isa = PBXBuildFile; fileRef = BAEA45541E279D5C00FA219F /* tinydir.h */; };
 		BAEA45561E279D5C00FA219F /* tinydir.h in Headers */ = {isa = PBXBuildFile; fileRef = BAEA45541E279D5C00FA219F /* tinydir.h */; };
+		DD0826F726FD838E00F776B9 /* CCCallBack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0826F526FD838E00F776B9 /* CCCallBack.cpp */; };
+		DD0826F826FD838E00F776B9 /* CCCallBack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0826F526FD838E00F776B9 /* CCCallBack.cpp */; };
+		DD0826F926FD838E00F776B9 /* CCCallBack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DD0826F626FD838E00F776B9 /* CCCallBack.hpp */; };
+		DD0826FA26FD838E00F776B9 /* CCCallBack.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DD0826F626FD838E00F776B9 /* CCCallBack.hpp */; };
 		ED30577D1BEC76C90083C3ED /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = ED3057761BEC76C90083C3ED /* crypt.h */; };
 		ED30577E1BEC76C90083C3ED /* ioapi_mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ED3057771BEC76C90083C3ED /* ioapi_mem.cpp */; };
 		ED30577F1BEC76C90083C3ED /* ioapi_mem.h in Headers */ = {isa = PBXBuildFile; fileRef = ED3057781BEC76C90083C3ED /* ioapi_mem.h */; };
@@ -2215,6 +2219,8 @@
 		BAEA45521E279D5C00FA219F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		BAEA45531E279D5C00FA219F /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		BAEA45541E279D5C00FA219F /* tinydir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinydir.h; sourceTree = "<group>"; };
+		DD0826F526FD838E00F776B9 /* CCCallBack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CCCallBack.cpp; sourceTree = "<group>"; };
+		DD0826F626FD838E00F776B9 /* CCCallBack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CCCallBack.hpp; sourceTree = "<group>"; };
 		ED3057761BEC76C90083C3ED /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crypt.h; path = ../external/sources/unzip/crypt.h; sourceTree = "<group>"; };
 		ED3057771BEC76C90083C3ED /* ioapi_mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ioapi_mem.cpp; path = ../external/sources/unzip/ioapi_mem.cpp; sourceTree = "<group>"; };
 		ED3057781BEC76C90083C3ED /* ioapi_mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ioapi_mem.h; path = ../external/sources/unzip/ioapi_mem.h; sourceTree = "<group>"; };
@@ -3463,6 +3469,8 @@
 				46FDDAEE202ADDCE00931238 /* utlist.h */,
 				46FDDAFC202ADDCE00931238 /* ZipUtils.cpp */,
 				46FDDB2A202ADDCE00931238 /* ZipUtils.h */,
+				DD0826F526FD838E00F776B9 /* CCCallBack.cpp */,
+				DD0826F626FD838E00F776B9 /* CCCallBack.hpp */,
 			);
 			name = base;
 			path = ../cocos/base;
@@ -3718,6 +3726,7 @@
 				046B689521A10D5800B33469 /* MiddlewareMacro.h in Headers */,
 				46FDDAC3202ACC6A00931238 /* FrameBuffer.h in Headers */,
 				4617863D20522469008256E1 /* HttpResponse.h in Headers */,
+				DD0826F926FD838E00F776B9 /* CCCallBack.hpp in Headers */,
 				1A29D7A320566CAC00168D9A /* CCCanvasRenderingContext2D.h in Headers */,
 				1A29D77D2056667800168D9A /* csscolorparser.hpp in Headers */,
 				4693038A2046AE05004A3D6C /* State.hpp in Headers */,
@@ -3961,8 +3970,6 @@
 				046E06602185B41B00B24E2D /* DeformVertices.h in Headers */,
 				425D3FF322D86BEF00BCED11 /* Mat3.hpp in Headers */,
 				ED5A63FE236C3860007A0CF0 /* jsb_websocket_server.hpp in Headers */,
-				46D310C022AF5901001D4590 /* http_parser.h in Headers */,
-				0430129D21DCF2B80007084D /* IkConstraint.h in Headers */,
 				1A28FF6D1F20AFAB007A1D9D /* SRError.h in Headers */,
 				46AE3FE32092F3A600F3A228 /* inspector_agent.h in Headers */,
 				46AE3FEB2092F3A600F3A228 /* node_mutex.h in Headers */,
@@ -4178,6 +4185,7 @@
 				4617865E2052607E008256E1 /* jsb_xmlhttprequest.hpp in Headers */,
 				04DBD3C822AE2DBD00DBE4CD /* HasRendererObject.h in Headers */,
 				04DBD3EC22AE2DBD00DBE4CD /* CurveTimeline.h in Headers */,
+				DD0826FA26FD838E00F776B9 /* CCCallBack.hpp in Headers */,
 				46FDDAB0202ACC6A00931238 /* Texture2D.h in Headers */,
 				50ABBD3F1925AB0000A911A9 /* CCGeometry.h in Headers */,
 				4693039D2046AE05004A3D6C /* PlatformUtils.h in Headers */,
@@ -4414,7 +4422,6 @@
 				4617863220522469008256E1 /* SocketIO.h in Headers */,
 				46FDDAB8202ACC6A00931238 /* IndexBuffer.h in Headers */,
 				1A28FF5C1F20AFAB007A1D9D /* NSURLRequest+SRWebSocketPrivate.h in Headers */,
-				46D310B122AF5901001D4590 /* inspector_socket_server.h in Headers */,
 				ED5A63FB236C384C007A0CF0 /* WebSocketServer.h in Headers */,
 				1AAAC8F0205CB6E9005321B9 /* AudioEngine-inl.h in Headers */,
 				04DBD3D622AE2DBD00DBE4CD /* ColorTimeline.h in Headers */,
@@ -4609,6 +4616,7 @@
 				46AE3FF52092F3A600F3A228 /* util.cc in Sources */,
 				046E06582185B41B00B24E2D /* Armature.cpp in Sources */,
 				46FDDAE1202ACC6A00931238 /* GFXUtils.cpp in Sources */,
+				DD0826F726FD838E00F776B9 /* CCCallBack.cpp in Sources */,
 				04886B4122CE22F2008CEB66 /* SlicedSprite2D.cpp in Sources */,
 				1A52DB6B205BCDC700350EE3 /* Utils.cpp in Sources */,
 				4693042E2046AE06004A3D6C /* jsb_helper.cpp in Sources */,
@@ -4891,9 +4899,7 @@
 				46AE3FF22092F3A600F3A228 /* SHA1.cpp in Sources */,
 				04DBD3C422AE2DBD00DBE4CD /* VertexEffect.cpp in Sources */,
 				ED30579E1BEC77BD0083C3ED /* ConvertUTFWrapper.cpp in Sources */,
-				46E26C84229BC870006DC27A /* ScriptEngine.cpp in Sources */,
 				ED5A6401236C3860007A0CF0 /* jsb_websocket_server.cpp in Sources */,
-				0430122821DCF2B80007084D /* PathConstraint.c in Sources */,
 				046E06892185B44A00B24E2D /* BaseFactory.cpp in Sources */,
 				04DBD44022AE2DBD00DBE4CD /* DrawOrderTimeline.cpp in Sources */,
 				1A28FF801F20AFAB007A1D9D /* SRMutex.m in Sources */,
@@ -4951,8 +4957,6 @@
 				469303A12046AE05004A3D6C /* ScriptEngine.mm in Sources */,
 				046E06EA2185B4A500B24E2D /* JSONDataParser.cpp in Sources */,
 				04DBD42C22AE2DBD00DBE4CD /* IkConstraintData.cpp in Sources */,
-				043012AE21DCF2B80007084D /* MeshAttachment.c in Sources */,
-				0430123821DCF2B80007084D /* BoneData.c in Sources */,
 				ED5A63F9236C384C007A0CF0 /* WebSocketServer.cpp in Sources */,
 				046B688B219FA61200B33469 /* MiddlewareManager.cpp in Sources */,
 				46FDDB8C202ADDCE00931238 /* CCAutoreleasePool.cpp in Sources */,
@@ -4994,6 +4998,7 @@
 				1A14FD922080B4E300E10ABE /* CCGLUtils.cpp in Sources */,
 				04DBD43822AE2DBD00DBE4CD /* TranslateTimeline.cpp in Sources */,
 				1A28FF741F20AFAB007A1D9D /* SRHash.m in Sources */,
+				DD0826F826FD838E00F776B9 /* CCCallBack.cpp in Sources */,
 				46FDDB70202ADDCE00931238 /* ZipUtils.cpp in Sources */,
 				50ABBD511925AB0000A911A9 /* Quaternion.cpp in Sources */,
 				46930469204FE20F004A3D6C /* CCLog.cpp in Sources */,
@@ -5343,7 +5348,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../external/ios/libs\"";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DCC_NEW_RENDERER";
@@ -5352,7 +5357,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../external/sources $(SRCROOT)/../external/ios/include $(SRCROOT)/../external/ios/include/freetype $(SRCROOT)/../cocos/editor-support/ $(SRCROOT)/../external/ios/include/v8 $(SRCROOT)/../external/ios/include/uv";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "$(inherited) $(SRCROOT)/../external/sources $(SRCROOT)/../external/ios/include $(SRCROOT)/../external/ios/include/freetype $(SRCROOT)/../cocos/editor-support/";
-				VALID_ARCHS = "arm64 armv7";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -5372,7 +5377,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../external/ios/libs\"";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
@@ -5381,7 +5386,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../external/sources $(SRCROOT)/../external/ios/include $(SRCROOT)/../external/ios/include/freetype $(SRCROOT)/../cocos/editor-support/ $(SRCROOT)/../external/ios/include/v8";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "$(inherited) $(SRCROOT)/../external/sources $(SRCROOT)/../external/ios/include $(SRCROOT)/../external/ios/include/freetype $(SRCROOT)/../cocos/editor-support/ $(SRCROOT)/../external/ios/include/v8 $(SRCROOT)/../external/ios/include/uv";
-				VALID_ARCHS = "arm64 armv7";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};

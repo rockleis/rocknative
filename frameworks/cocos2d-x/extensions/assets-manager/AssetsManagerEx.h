@@ -283,6 +283,10 @@ protected:
     virtual void onSuccess(const std::string &srcUrl, const std::string &storagePath, const std::string &customId);
     
 private:
+    std::string getPackageUrl();
+    std::string getVersionFileUrl();
+    std::string getManifestFileUrl();
+
     void batchDownload();
 
     // Called when one DownloadUnits finished

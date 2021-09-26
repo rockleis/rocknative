@@ -347,8 +347,14 @@ namespace se {
     {
         //        RETRUN_VAL_IF_FAIL(v8::V8::InitializeICUDefaultLocation(nullptr, "/Users/james/Project/v8/out.gn/x64.debug/icudtl.dat"), false);
         //        v8::V8::InitializeExternalStartupData("/Users/james/Project/v8/out.gn/x64.debug/natives_blob.bin", "/Users/james/Project/v8/out.gn/x64.debug/snapshot_blob.bin"); //REFINE
-        _platform = v8::platform::NewDefaultPlatform().release();
-        v8::V8::InitializePlatform(_platform);
+        //@Leo V8只能实例化一次，在重复创建cocos的时候要确保V8只创建一次，还有Platform同理
+        if (sharedPlatform == nullptr) {
+            _platform = v8::platform::NewDefaultPlatform().release();
+            sharedPlatform = _platform;
+            v8::V8::InitializePlatform(_platform);
+        }else {
+            _platform = sharedPlatform;
+        }
         bool ok = v8::V8::Initialize();
         assert(ok);
     }
@@ -356,9 +362,10 @@ namespace se {
     ScriptEngine::~ScriptEngine()
     {
         cleanup();
-        v8::V8::Dispose();
-        v8::V8::ShutdownPlatform();
-        delete _platform;
+        //@Leo V8只能实例化一次，所以在清除的时候不需要关闭v8
+//        v8::V8::Dispose();
+//        v8::V8::ShutdownPlatform();
+//        delete _platform;
     }
 
     bool ScriptEngine::init()
@@ -366,6 +373,9 @@ namespace se {
         cleanup();
         SE_LOGD("Initializing V8, version: %s\n", v8::V8::GetVersion());
         ++_vmId;
+        
+        _engineThreadId = std::this_thread::get_id();
+
 
         for (const auto& hook : _beforeInitHookArray)
         {
@@ -394,6 +404,8 @@ namespace se {
 
         NativePtrToObjectMap::init();
         NonRefNativePtrCreatedByCtorMap::init();
+
+        Object::setup();
 
         Class::setIsolate(_isolate);
         Object::setIsolate(_isolate);
@@ -589,7 +601,8 @@ namespace se {
 
     void ScriptEngine::garbageCollect()
     {
-        SE_LOGD("GC begin ..., (js->native map) size: %d, all objects: %d\n", (int)NativePtrToObjectMap::size(), (int)__objectMap.size());
+        int objSize = __objectMap ? (int)__objectMap->size() : -1;
+        SE_LOGD("GC begin ..., (js->native map) size: %d, all objects: %d\n", (int)NativePtrToObjectMap::size(), objSize);
         const double kLongIdlePauseInSeconds = 1.0;
         _isolate->ContextDisposedNotification();
         _isolate->IdleNotificationDeadline(_platform->MonotonicallyIncreasingTime() + kLongIdlePauseInSeconds);
@@ -597,7 +610,8 @@ namespace se {
         // garbage and will therefore also invoke all weak callbacks of actually
         // unreachable persistent handles.
         _isolate->LowMemoryNotification();
-        SE_LOGD("GC end ..., (js->native map) size: %d, all objects: %d\n", (int)NativePtrToObjectMap::size(), (int)__objectMap.size());
+        objSize = __objectMap ? (int)__objectMap->size() : -1;
+        SE_LOGD("GC end ..., (js->native map) size: %d, all objects: %d\n", (int)NativePtrToObjectMap::size(), objSize);
     }
 
     bool ScriptEngine::isGarbageCollecting()
@@ -617,6 +631,13 @@ namespace se {
 
     bool ScriptEngine::evalString(const char* script, ssize_t length/* = -1 */, Value* ret/* = nullptr */, const char* fileName/* = nullptr */)
     {
+        if(_engineThreadId != std::this_thread::get_id())
+        {
+            // `evalString` should run in main thread
+            assert(false);
+            return false;
+        }
+
         assert(script != nullptr);
         if (length < 0)
             length = strlen(script);
@@ -634,6 +655,9 @@ namespace se {
         }
 
         // It is needed, or will crash if invoked from non C++ context, such as invoked from objective-c context(for example, handler of UIKit).
+        if (_isolate == nullptr) {
+            return false;
+        }
         v8::HandleScope handle_scope(_isolate);
 
         std::string scriptStr(script, length);
@@ -697,6 +721,7 @@ namespace se {
 
     bool ScriptEngine::runScript(const std::string& path, Value* ret/* = nullptr */)
     {
+        
         assert(!path.empty());
         assert(_fileOperationDelegate.isValid());
 

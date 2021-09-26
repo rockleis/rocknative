@@ -4300,6 +4300,7 @@ bool js_register_renderer_SimpleSprite2D(se::Object* obj)
 
     cls->defineFunction("ctor", _SE(js_renderer_SimpleSprite2D_ctor));
     cls->defineFinalizeFunction(_SE(js_cocos2d_renderer_SimpleSprite2D_finalize));
+    cls->defineFunction("setOffset", _SE(js_renderer_SimpleSprite2D_setOffset));
     cls->install();
     JSBClassType::registerClass<cocos2d::renderer::SimpleSprite2D>(cls);
 
@@ -4310,6 +4311,32 @@ bool js_register_renderer_SimpleSprite2D(se::Object* obj)
     se::ScriptEngine::getInstance()->clearException();
     return true;
 }
+
+// jim+
+static bool js_renderer_SimpleSprite2D_setOffset(se::State& s)
+{
+    cocos2d::renderer::SimpleSprite2D* cobj = (cocos2d::renderer::SimpleSprite2D*)s.nativeThisObject();
+    SE_PRECONDITION2(cobj, false, "js_renderer_SimpleSprite2D_setOffset : Invalid Native Object");
+    const auto& args = s.args();
+    size_t argc = args.size();
+//    __android_log_print(ANDROID_LOG_DEBUG, "jswrapper", "js_renderer_SimpleSprite2D_setOffset=%d",  argc);
+    CC_UNUSED bool ok = true;
+    if (argc == 4) {
+        int32_t tmp0 = 0; ok &= seval_to_int32(args[0], &tmp0);
+        int32_t tmp1 = 0; ok &= seval_to_int32(args[1], &tmp1);
+        int32_t tmp2 = 0; ok &= seval_to_int32(args[2], &tmp2);
+        int32_t tmp3 = 0; ok &= seval_to_int32(args[3], &tmp3);
+        cobj->setOffset(tmp0, tmp1, tmp2, tmp3);
+//        __android_log_print(ANDROID_LOG_DEBUG, "jswrapper", "tmp0=%d,1=%d,2=%d,3=%d", tmp0, tmp1, tmp2, tmp3);
+        // ok &= boolean_to_seval(result, &s.rval());
+        // SE_PRECONDITION2(ok, false, "js_renderer_MaskAssembler_getMaskInverted : Error processing arguments");
+        return true;
+    }
+    SE_REPORT_ERROR("wrong number of arguments: %d, was expecting %d", (int)argc, 0);
+    return false;
+}
+SE_BIND_FUNC(js_renderer_SimpleSprite2D_setOffset)
+// end jim+
 
 se::Object* __jsb_cocos2d_renderer_MaskAssembler_proto = nullptr;
 se::Class* __jsb_cocos2d_renderer_MaskAssembler_class = nullptr;

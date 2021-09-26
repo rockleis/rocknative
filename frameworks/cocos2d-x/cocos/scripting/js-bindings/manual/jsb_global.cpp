@@ -55,6 +55,12 @@ void jsb_set_xxtea_key(const std::string& key)
     xxteaKey = key;
 }
 
+//@Leo 强制释放Downloader
+void clearDownloader() {
+    _localDownloader = nullptr;
+    _localDownloaderHandlers.clear();
+}
+
 static cocos2d::network::Downloader *localDownloader()
 {
     if(!_localDownloader)
@@ -221,10 +227,13 @@ void jsb_init_file_operation_delegate()
             return FileUtils::getInstance()->isFileExist(path);
         };
 
-        assert(delegate.isValid());
-
-        se::ScriptEngine::getInstance()->setFileOperationDelegate(delegate);
+       
     }
+    
+    //@Leo 由于多次创建，FileOperationDelegate 不能每次赋值，所以放到最外层
+    assert(delegate.isValid());
+
+    se::ScriptEngine::getInstance()->setFileOperationDelegate(delegate);
 }
 
 bool jsb_enable_debugger(const std::string& debuggerServerAddr, uint32_t port, bool isWaitForConnect)
@@ -638,6 +647,7 @@ SE_BIND_FUNC(JSB_cleanScript)
 
 static bool JSB_core_restartVM(se::State& s)
 {
+    cocos2d::cardLog::getInstance()->log("JSB_core_restartVM 业务层调用过来的，调用它可能会崩溃");
     //REFINE: release AudioEngine, waiting HttpClient & WebSocket threads to exit.
     Application::getInstance()->restart();
     return true;
@@ -819,8 +829,9 @@ bool jsb_global_load_image(const std::string& path, const se::Value& callbackVal
         callbackVal.toObject()->call(seArgs, nullptr);
         return true;
     }
-
-    auto initImageFunc = [path, callbackVal](const std::string& fullPath, unsigned char* imageData, int imageBytes){
+    
+    std::shared_ptr<se::Value> callbackPtr = std::make_shared<se::Value>(callbackVal);
+    auto initImageFunc = [path, callbackPtr](const std::string& fullPath, unsigned char* imageData, int imageBytes){
         Image* img = new (std::nothrow) Image();
 
         __threadPool->pushTask([=](int tid){
@@ -892,7 +903,7 @@ bool jsb_global_load_image(const std::string& path, const se::Value& callbackVal
                     SE_REPORT_ERROR("initWithImageFile: %s failed!", path.c_str());
                 }
 
-                callbackVal.toObject()->call(seArgs, nullptr);
+                callbackPtr->toObject()->call(seArgs, nullptr);
                 img->release();
             });
 

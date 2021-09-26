@@ -29,7 +29,10 @@ RENDERER_BEGIN
 
 SimpleSprite2D::SimpleSprite2D()
 {
-    
+    this->xLTOffset = 0;
+    this->xRTOffset = 0;
+    this->xLBOffset = 0;
+    this->xRBOffset = 0;
 }
 
 SimpleSprite2D::~SimpleSprite2D()
@@ -37,8 +40,19 @@ SimpleSprite2D::~SimpleSprite2D()
     
 }
 
+// jim+
+void SimpleSprite2D::setOffset(int xLTOffset, int xRTOffset, int xLBOffset, int xRBOffset) {
+//    __android_log_print(ANDROID_LOG_DEBUG, "jswrapper", "c++setOffset:%d,%d,%d,%d", xLTOffset, xRTOffset, xLBOffset, xRBOffset);
+    this->xLTOffset = xLTOffset;
+    this->xRTOffset = xRTOffset;
+    this->xLBOffset = xLBOffset;
+    this->xRBOffset = xRBOffset;
+}
+// end jim+
+
 void SimpleSprite2D::fillBuffers(NodeProxy* node, MeshBuffer* buffer, std::size_t index)
 {
+//  __android_log_print(ANDROID_LOG_DEBUG, "jswrapper", "SimpleSprite2D:fillBuffers");
     RenderData* data = _datas->getRenderData(0);
     if (!data)
     {
@@ -64,25 +78,25 @@ void SimpleSprite2D::fillBuffers(NodeProxy* node, MeshBuffer* buffer, std::size_
         
         // left bottom
         float u = srcWorldVerts[2];
-        worldMat.transformVector(vl, vb, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
+        worldMat.transformVector(vl + this->xLBOffset, vb, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
         srcWorldVerts[2] = u;
 
         // right bottom
         srcWorldVerts += dataPerVertex;
         u = srcWorldVerts[2];
-        worldMat.transformVector(vr, vb, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
+        worldMat.transformVector(vr + this->xRBOffset, vb, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
         srcWorldVerts[2] = u;
 
         // left top
         srcWorldVerts += dataPerVertex;
         u = srcWorldVerts[2];
-        worldMat.transformVector(vl, vt, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
+        worldMat.transformVector(vl + this->xLTOffset, vt, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
         srcWorldVerts[2] = u;
 
         // right top
         srcWorldVerts += dataPerVertex;
         u = srcWorldVerts[2];
-        worldMat.transformVector(vr, vt, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
+        worldMat.transformVector(vr  + this->xRTOffset, vt, 0.0f, 1.0f, (cocos2d::Vec3*)srcWorldVerts);
         srcWorldVerts[2] = u;
         
         *_dirty &= ~VERTICES_DIRTY;

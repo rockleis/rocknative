@@ -29,3 +29,4 @@
 
 bool jsb_register_all_modules();
 
+bool cleanWebView(); //@Leo 强制释放 Webview

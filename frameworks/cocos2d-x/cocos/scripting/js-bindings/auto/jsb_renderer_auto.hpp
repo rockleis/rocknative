@@ -3,9 +3,10 @@
 #if (USE_GFX_RENDERER > 0) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
 #include "cocos/scripting/js-bindings/jswrapper/SeApi.h"
+//#include <android/log.h>          // whos
 
 extern se::Object* __jsb_cocos2d_renderer_ProgramLib_proto;
-extern se::Class* __jsb_cocos2d_renderer_ProgramLib_class;
+//extern se::Class* __log/jsb_cocos2d_renderer_ProgramLib_class;
 
 bool js_register_cocos2d_renderer_ProgramLib(se::Object* obj);
 bool register_all_renderer(se::Object* obj);
@@ -287,6 +288,9 @@ extern se::Class* __jsb_cocos2d_renderer_SimpleSprite2D_class;
 bool js_register_cocos2d_renderer_SimpleSprite2D(se::Object* obj);
 bool register_all_renderer(se::Object* obj);
 SE_DECLARE_FUNC(js_renderer_SimpleSprite2D_SimpleSprite2D);
+// jim+
+SE_DECLARE_FUNC(js_renderer_SimpleSprite2D_setOffset);
+// end jim+
 
 extern se::Object* __jsb_cocos2d_renderer_MaskAssembler_proto;
 extern se::Class* __jsb_cocos2d_renderer_MaskAssembler_class;

@@ -197,7 +197,8 @@ protected:
      * @param units   The download units reference to be modified by the generation result
      */
     void genResumeAssetsList(DownloadUnits *units) const;
-    
+    void genResumeAssetsList(DownloadUnits *units, std::string newPackageUrl) const;
+
     /** @brief Prepend all search paths to the FileUtils.
      */
     void prependSearchPaths();

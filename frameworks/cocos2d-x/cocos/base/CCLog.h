@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <functional>
 #include "platform/CCPlatformDefine.h"
 
 /// @cond DO_NOT_SHOW
@@ -50,6 +51,20 @@
 
 namespace cocos2d
 {
+    typedef std::function<void(const char* str)> logCallback;
+
+    class cardLog {
+        private:
+            logCallback _logCallback;
+        
+        public:
+            cardLog():_logCallback(nullptr) {};
+            static cardLog* getInstance();
+            static void destroyInstance();
+            void setLogCallback(logCallback callback);
+            void log(const char* strlog);
+
+    };
 
 	/**
 	 @brief Output Debug message.
