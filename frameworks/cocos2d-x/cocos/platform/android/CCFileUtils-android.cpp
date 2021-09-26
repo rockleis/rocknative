@@ -90,7 +90,7 @@ FileUtilsAndroid::~FileUtilsAndroid()
 bool FileUtilsAndroid::init()
 {
     _defaultResRootPath = ASSETS_FOLDER_NAME;
-    
+    _defaultResRootPath += "game1/";
     std::string assetsPath(getApkPathJNI());
     if (assetsPath.find("/obb/") != std::string::npos)
     {

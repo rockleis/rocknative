@@ -169,6 +169,17 @@ extern "C"
         return glContextAttrsJava;
     }
 
+    JNIEXPORT void JNICALL JNI_RENDER(nativeSwitchGame)(JNIEnv*  env, jobject thiz, jstring jDefaultResourcePath)
+    {
+        std::string defaultResourcePath = JniHelper::jstring2string(jDefaultResourcePath);
+        LOGD("nativeInit: %d, %d, %s",  defaultResourcePath.c_str());
+
+        if (!defaultResourcePath.empty())
+            FileUtils::getInstance()->setDefaultResourceRootPath(defaultResourcePath);
+
+        restartJSVM();
+    }
+
 	/*****************************************************
 	 * Cocos2dxRenderer native functions implementation.
 	 *****************************************************/

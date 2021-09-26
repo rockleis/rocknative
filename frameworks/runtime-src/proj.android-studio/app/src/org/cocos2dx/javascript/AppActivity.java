@@ -27,13 +27,17 @@ package org.cocos2dx.javascript;
 import org.cocos2d.helloworld.MainActivity;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.cocos2dx.lib.Cocos2dxRenderer;
 
 import android.os.Bundle;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.util.Log;
 
 public class AppActivity extends Cocos2dxActivity {
+    boolean isFirst = true;
+    String gameType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,6 @@ public class AppActivity extends Cocos2dxActivity {
         }
         // DO OTHER INITIALIZATION BELOW
         SDKWrapper.getInstance().init(this);
-
     }
 
     @Override
@@ -67,6 +70,18 @@ public class AppActivity extends Cocos2dxActivity {
         super.onResume();
         SDKWrapper.getInstance().onResume();
 
+        if(MainActivity.openGame && !isFirst) {
+            MainActivity.openGame = false;
+
+            if(gameType == MainActivity.chooseGame){
+                return;
+            }
+            Log.d("result","nativeSwitchGame");
+            gameType = MainActivity.chooseGame;
+            Cocos2dxRenderer.nativeSwitchGame("@assets/"+MainActivity.chooseGame);
+        }
+
+        if(isFirst) isFirst = false;
     }
 
     @Override

@@ -181,6 +181,7 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
     private static native void nativeOnSurfaceChanged(final int width, final int height);
     private static native void nativeOnPause();
     private static native void nativeOnResume();
+    public static native void nativeSwitchGame(final String resourcePath);
 
     // This function will be invoked in main thread.
     public void setPauseInMainThread(boolean value) {
